@@ -1,4 +1,4 @@
-Scala Type Provider examples
+Scala type provider examples
 ============================
 
 This repository contains type provider examples that will be discussed by
@@ -13,14 +13,14 @@ We'll take as a running example the construction of RDF graphs using
 [Banana RDF](https://github.com/w3c/banana-rdf), a Scala RDF library
 developed by the [World Wide Web Consortium](http://www.w3.org/).
 
-Banana provides a clear and concise internal DSL for building RDF graphs.
+Banana provides a clear and concise embedded DSL for building RDF graphs.
 For example, we might describe the second draft notebook of Mary Shelley's
 _Frankenstein_ as follows:
 
 ``` scala
 val frankensteinNotebookB = (
   URI("http://shelleygodwinarchive.org/data/ox/ox-ms_abinger_c57")
-    .a(dct.Image)
+    .a(dct.Text)
     -- dc.title ->- "Frankenstein Draft Notebook B"
     -- dc.creator ->- URI("https://en.wikipedia.org/wiki/Mary_Shelley")
 )
@@ -41,9 +41,9 @@ class DCPrefix[Rdf <: RDF](ops: RDFOps[Rdf])
 }
 ```
 
-And then somewhere else in our project, we'd write the following:
+And then somewhere else in our project we'd write the following:
 
-```
+``` scala
 object dc extends DCPrefix[Rdf]
 ```
 
@@ -117,7 +117,7 @@ but `dct` and `dc` have singleton object types, not structural types.
 Licenses
 --------
 
-Portions of this software may use (XML ¦ RDF) schemas Copyright © 2011
+Portions of this software may use RDF schemas copyright © 2011
 [DCMI](http://dublincore.org/), the Dublin Core Metadata Initiative.
 These are licensed under the [Creative Commons 3.0
 Attribution](http://creativecommons.org/licenses/by/3.0/) license.
