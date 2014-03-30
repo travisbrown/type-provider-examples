@@ -112,7 +112,7 @@ which allow us to expand the body of an annotated object definition.
 ```
 
 These definitions support the same usage as the anonymous examples above,
-but `dct` and `dc` have singleton object types, not structural types.
+but `dct` and `dc` are full-fledged objects, not instances of structural types.
 
 Licenses
 --------
