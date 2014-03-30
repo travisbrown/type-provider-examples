@@ -30,12 +30,17 @@ object TypeProviderExamples extends Build {
   lazy val rdfs: Project = Project(
     "rdfs",
     file("rdfs"),
-    settings = buildSettings
+    settings = buildSettings ++ Seq(
+      /** See this Stack Overflow question and answer for some discussion of
+        * why we need this line: http://stackoverflow.com/q/17134244/334519
+        */
+      unmanagedClasspath in Compile <++= unmanagedResources in Compile
+    )
   ).dependsOn(rdfsPublic, rdfsAnonymous)
 }
 
 object BuildSettings {
-  val paradiseVersion = "2.0.0-M3"
+  val paradiseVersion = "2.0.0-M6"
   val paradiseDependency =
     "org.scalamacros" % "paradise" % paradiseVersion cross CrossVersion.full
 
@@ -51,6 +56,13 @@ object BuildSettings {
       Resolver.sonatypeRepo("snapshots"),
       Resolver.sonatypeRepo("releases")
     ),
+
+    /** We need the Macro Paradise plugin both to support the macro
+      * annotations used in the public type provider implementation and to
+      * allow us to use quasiquotes in both implementations. The anonymous
+      * type providers could easily (although much less concisely) be
+      * implemented without the plugin.
+      */
     addCompilerPlugin(paradiseDependency)
   )
 
