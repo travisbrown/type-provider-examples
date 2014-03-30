@@ -17,6 +17,17 @@ object PrefixGenerator {
 
     def bail(message: String) = c.abort(c.enclosingPosition, message)
 
+    /** The expected usage will look something like this following:
+      *
+      * {{{
+      * @fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf] ...
+      * }}}
+      *
+      * The argument to the annotation must be a string literal, since we need
+      * to know its value at compile-time (i.e., now) in order to read and
+      * parse the schema. The following code digs into the tree of the macro
+      * application and confirms that we have a string literal.
+      */
     val path = c.macroApplication match {
       case Apply(Select(Apply(_, List(Literal(Constant(s: String)))), _), _) => s
       case _ => bail(
@@ -25,7 +36,14 @@ object PrefixGenerator {
     }
 
     annottees.map(_.tree) match {
-      case List(q"""object $name extends $parent { ..$body }""") =>
+      /** Note that we're checking that the body of the annotated object is
+        * empty, since in this case it wouldn't make sense for the user to add
+        * his or her own methods to the prefix object. For other kinds of type
+        * providers this might be reasonable or even desirable. In these cases
+        * you'd simply remove the check for emptiness below and add the body
+        * to the definition you return.
+        */
+      case List(q"""object $name extends $parent { ..$body }""") if body.isEmpty =>
         parent match {
           case Apply(
             AppliedTypeTree(prefixBuilder, List(rdf)),
@@ -42,16 +60,15 @@ object PrefixGenerator {
             }
 
             c.Expr[Any](
-              q"""object $name extends $parent { ..${defs ::: body} }"""
+              q"""object $name extends $parent { ..$defs }"""
             )
           case _ => bail(
             "You must supply a prefix and URI to the constructor." 
           )
         }
 
-
       case _ => bail(
-        "You can only create a prefix from an object definition."
+        "You can only create a prefix from an object definition with an empty body."
       )
     }
   }
