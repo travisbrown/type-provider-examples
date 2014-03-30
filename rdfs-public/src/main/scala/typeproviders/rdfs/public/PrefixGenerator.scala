@@ -2,9 +2,9 @@ package typeproviders.rdfs.public
 
 import org.w3.banana._
 import org.w3.banana.sesame.Sesame
+import scala.annotation.StaticAnnotation
 import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import scala.annotation.StaticAnnotation
 import typeproviders.rdfs.SchemaParser
 
 class fromSchema(path: String) extends StaticAnnotation {
