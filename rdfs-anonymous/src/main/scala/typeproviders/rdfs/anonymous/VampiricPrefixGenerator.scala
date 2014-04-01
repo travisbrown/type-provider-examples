@@ -13,21 +13,27 @@ import typeproviders.rdfs.SchemaParser
 object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
   class body(tree: Any) extends StaticAnnotation
 
+  /** A helper method that allows a macro method to read an annotation on
+    * itself. We'll use this below in the macro methods on the anonymous class
+    * we're defining.
+    */
   def selectField_impl(c: Context) = c.Expr(
     c.macroApplication.symbol.annotations.filter(
       _.tpe <:< c.typeOf[body]
     ).head.scalaArgs.head
   )
 
-  def fromSchema[Rdf <: RDF](
-    path: String
-  )(implicit ops: RDFOps[Rdf]) = macro fromSchema_impl[Rdf]
+  def fromSchema[Rdf <: RDF](path: String)(implicit ops: RDFOps[Rdf]) =
+    macro fromSchema_impl[Rdf]
 
-  def fromSchema_impl[Rdf <: RDF: c.WeakTypeTag](c: Context)(
-    path: c.Expr[String]
-  )(ops: c.Expr[RDFOps[Rdf]]) = {
+  def fromSchema_impl[Rdf <: RDF: c.WeakTypeTag](c: Context)
+    (path: c.Expr[String])
+    (ops: c.Expr[RDFOps[Rdf]]) = {
     import c.universe._
 
+    /** The first several steps look exactly the same as they do in the
+      * non-vampiric version.
+      */
     def bail(message: String) = c.abort(c.enclosingPosition, message)
 
     val pathLiteral = path.tree match {
@@ -37,7 +43,7 @@ object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
       )
     }
 
-    val prefix = assignedValName(c).getOrElse(
+    val prefixName = assignedValName(c).getOrElse(
       bail("You must assign the output of the macro to a value.")
     )
 
@@ -57,6 +63,9 @@ object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
       schemaParser.classNames(baseUri) ++
       schemaParser.propertyNames(baseUri)
 
+    /** Here's where we diverge from the non-vampiric anonymous approach.
+      * Instead of nice simple vals, our terms are going to be macro methods. 
+      */
     val defs = names.map { name =>
       q"""
         @VampiricPrefixGenerator.body(ops.URI($name))
@@ -65,10 +74,14 @@ object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
       """
     }
 
+    /** This is again exactly the same as in the non-vampiric version, and the
+      * the inferred structural type of the instance we return will also be
+      * exactly the same.
+      */ 
     c.Expr[PrefixBuilder[Rdf]](
       q"""
         class Prefix extends
-          org.w3.banana.PrefixBuilder($prefix, $baseUriString)($ops) {
+          org.w3.banana.PrefixBuilder($prefixName, $baseUriString)($ops) {
           ..$defs
         }
         new Prefix {}
