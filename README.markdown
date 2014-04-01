@@ -33,7 +33,7 @@ vocabularies.
 The following is an example of how you'd define a `Prefix` class in Banana:
 
 ``` scala
-class DCPrefix[Rdf <: RDF](ops: RDFOps[Rdf])
+class DCPrefix[Rdf <: RDF](implicit ops: RDFOps[Rdf])
   extends PrefixBuilder("dc", "http://purl.org/dc/terms/")(ops) {
   val title = apply("title")
   val creator = apply("creator")
