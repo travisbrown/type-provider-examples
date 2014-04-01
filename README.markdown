@@ -87,6 +87,10 @@ val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")
 The inferred types of `dct` and `dc` are now structural types that allow the
 usage demonstrated in the definition of `frankensteinNotebookB` above.
 
+Please see the comments in [[the
+implementation]](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/PrefixGenerator.scala)
+for more detail about how exactly this approach works.
+
 Public type providers
 ---------------------
 
@@ -116,7 +120,7 @@ that's because it is).
 
 While we provide [an implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/VampiricPrefixGenerator.scala)
 of our example using vampire methods here, in general it's probably better to
-avoid the added complexity unless you know for a fact that the performance of
+avoid the added complexity, unless you know for a fact that the performance of
 calls to methods on the structural type is a problem in your application.
 
 Licenses
