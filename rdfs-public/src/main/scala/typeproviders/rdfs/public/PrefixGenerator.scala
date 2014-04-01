@@ -29,7 +29,8 @@ object PrefixGenerator {
       * application and confirms that we have a string literal.
       */
     val path = c.macroApplication match {
-      case Apply(Select(Apply(_, List(Literal(Constant(s: String)))), _), _) => s
+      case Apply(Select(Apply(_, List(Literal(Constant(s: String)))), _), _) =>
+        s
       case _ => bail(
         "You must provide a literal resource path for schema parsing."
       ) 
@@ -43,7 +44,10 @@ object PrefixGenerator {
         * you'd simply remove the check for emptiness below and add the body
         * to the definition you return.
         */
-      case List(q"""object $name extends $parent { ..$body }""") if body.isEmpty =>
+      case List(q"object $name extends $parent { ..$body }") if body.isEmpty =>
+        /** The following few steps look exactly like what we did in the case
+          * of the anonymous type providers.
+          */
         val schemaParser = SchemaParser.fromResource[Sesame](path).getOrElse(
           bail(s"Invalid schema: $path.")
         )
@@ -59,15 +63,24 @@ object PrefixGenerator {
           schemaParser.propertyNames(baseUri)
 
         val defs = names.map { name =>
-          q"""val ${newTermName(name)} = apply($name)"""
+          q"val ${newTermName(name)} = apply($name)"
         }
 
-        c.Expr[Any](
-          q"""object $name extends $parent(${name.decoded}, $baseUriString) { ..$defs }"""
+        /** We assume here that the parent is [[org.w3.banana.PrefixBuilder]].
+          * We could add some validation logic to confirm this, but the macro
+          * is likely to fail in a pretty straightforward way if it's not the
+          * case, so we'll leave it like this for the sake of simplicity.
+          */
+        c.Expr[PrefixBuilder](
+          q"""
+            object $name extends $parent(${name.decoded}, $baseUriString) {
+              ..$defs
+            }
+          """
         )
 
       case _ => bail(
-        "You can only create a prefix from an object definition with an empty body."
+        "You must annotate an object definition with an empty body."
       )
     }
   }

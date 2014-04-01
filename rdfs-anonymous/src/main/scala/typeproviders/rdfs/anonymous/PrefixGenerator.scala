@@ -71,7 +71,7 @@ object PrefixGenerator extends AnonymousTypeProviderUtils {
       * want to show up on the structural type instance we're building.
       */
     val defs = names.map { name =>
-      q"""val ${newTermName(name)} = apply($name)"""
+      q"val ${newTermName(name)} = apply($name)"
     }
 
     /** And now we define our anonymous class and instantiate it. See
