@@ -122,7 +122,8 @@ reflective access, which means you have to deal with warnings and a hit to
 performance. It's possible, however, to use ["vampire
 methods"](http://meta.plasm.us/posts/2013/07/12/vampire-methods-for-structural-types/)
 to avoid this penalty. Vampire methods are macro methods on the anonymous
-class that read their values from an annotation (if this sounds confusing,
+class that read their values from some location at compile time (in this case
+we're using a static annotation on the method; if this sounds confusing,
 that's because it is).
 
 While we provide [an implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/VampiricPrefixGenerator.scala)

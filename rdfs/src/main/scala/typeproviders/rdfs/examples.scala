@@ -24,15 +24,9 @@ class PublicTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
   import ops._
   import typeproviders.rdfs.public._
 
-  @fromSchema("/dctype.rdf") object dct extends PrefixBuilder[Rdf]//(
-    //"dct",
-    //"http://purl.org/dc/dcmitype/"
-  //)
+  @fromSchema("/dctype.rdf") object dct extends PrefixBuilder[Rdf]
 
-  @fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf]//(
-    //"dc",
-    //"http://purl.org/dc/terms/"
-  //)
+  @fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf]
 
   val frankensteinNotebookB = (
     URI("http://shelleygodwinarchive.org/data/ox/ox-ms_abinger_c57")
