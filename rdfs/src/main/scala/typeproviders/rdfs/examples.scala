@@ -9,13 +9,13 @@ class AnonymousTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
   import typeproviders.rdfs.anonymous._
 
   val dct = PrefixGenerator.fromSchema[Rdf]("/dctype.rdf")(
-    "dct",
-    "http://purl.org/dc/dcmitype/"
+    "dct"
+    //"http://purl.org/dc/dcmitype/"
   )
 
   val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")(
-    "dc",
-    "http://purl.org/dc/terms/"
+    "dc"
+    //"http://purl.org/dc/terms/"
   )
 
   val frankensteinNotebookB = (
@@ -30,15 +30,15 @@ class PublicTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
   import ops._
   import typeproviders.rdfs.public._
 
-  @fromSchema("/dctype.rdf") object dct extends PrefixBuilder[Rdf](
-    "dct",
-    "http://purl.org/dc/dcmitype/"
-  )
+  @fromSchema("/dctype.rdf") object dct extends PrefixBuilder[Rdf]//(
+    //"dct",
+    //"http://purl.org/dc/dcmitype/"
+  //)
 
-  @fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf](
-    "dc",
-    "http://purl.org/dc/terms/"
-  )
+  @fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf]//(
+    //"dc",
+    //"http://purl.org/dc/terms/"
+  //)
 
   val frankensteinNotebookB = (
     URI("http://shelleygodwinarchive.org/data/ox/ox-ms_abinger_c57")

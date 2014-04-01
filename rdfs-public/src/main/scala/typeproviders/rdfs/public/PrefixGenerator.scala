@@ -44,28 +44,27 @@ object PrefixGenerator {
         * to the definition you return.
         */
       case List(q"""object $name extends $parent { ..$body }""") if body.isEmpty =>
-        parent match {
-          case Apply(
-            AppliedTypeTree(prefixBuilder, List(rdf)),
-            List(Literal(Constant(prefix: String)), Literal(Constant(uri: String)))
-          ) =>
-            val schemaParser = SchemaParser.fromResource[Sesame](path, uri).getOrElse(
-              bail(s"Invalid schema: $path.")
-            )
+        val schemaParser = SchemaParser.fromResource[Sesame](path).getOrElse(
+          bail(s"Invalid schema: $path.")
+        )
 
-            val names = schemaParser.classNames ++ schemaParser.propertyNames
+        val baseUri = schemaParser.inferBaseUri.getOrElse(
+          bail("Could not identify a unique schema URI.")
+        )
 
-            val defs = names.map { name =>
-              q"""val ${newTermName(name)} = apply($name)"""
-            }
+        val baseUriString = RDFOps[Sesame].fromUri(baseUri)
 
-            c.Expr[Any](
-              q"""object $name extends $parent { ..$defs }"""
-            )
-          case _ => bail(
-            "You must supply a prefix and URI to the constructor." 
-          )
+        val names =
+          schemaParser.classNames(baseUri) ++
+          schemaParser.propertyNames(baseUri)
+
+        val defs = names.map { name =>
+          q"""val ${newTermName(name)} = apply($name)"""
         }
+
+        c.Expr[Any](
+          q"""object $name extends $parent(${name.decoded}, $baseUriString) { ..$defs }"""
+        )
 
       case _ => bail(
         "You can only create a prefix from an object definition with an empty body."

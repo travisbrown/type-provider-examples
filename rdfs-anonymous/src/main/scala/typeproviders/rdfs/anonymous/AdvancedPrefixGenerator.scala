@@ -52,19 +52,21 @@ object AdvancedPrefixGenerator {
       case _ => bail("You must use this macro in a class definition.")
     }
 
-    val uriLiteral = uri.tree match {
-      case Literal(Constant(s: String)) => s
-      case _ => bail("You must provide a literal URI.")
-    }
-
     val schemaParser = SchemaParser.fromResource[Sesame](
-      pathLiteral,
-      uriLiteral
+      pathLiteral
     ).getOrElse(
       bail(s"Invalid schema: $pathLiteral.")
     )
 
-    val names = schemaParser.classNames ++ schemaParser.propertyNames
+    val baseUri = schemaParser.inferBaseUri.getOrElse(
+      bail("Could not identify a unique schema URI.")
+    )
+    
+    val baseUriString = RDFOps[Sesame].fromUri(baseUri)
+
+    val names =
+      schemaParser.classNames(baseUri) ++
+      schemaParser.propertyNames(baseUri)
 
     val defs = names.map { name =>
       q"""
@@ -77,7 +79,7 @@ object AdvancedPrefixGenerator {
     c.Expr[PrefixBuilder[Rdf]](
       q"""
         class Prefix extends
-          org.w3.banana.PrefixBuilder($prefix, $uriLiteral)($ops) {
+          org.w3.banana.PrefixBuilder($prefix, $baseUriString)($ops) {
           ..$defs
         }
         new Prefix {}
