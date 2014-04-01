@@ -8,15 +8,9 @@ class AnonymousTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
   import ops._
   import typeproviders.rdfs.anonymous._
 
-  val dct = PrefixGenerator.fromSchema[Rdf]("/dctype.rdf")(
-    "dct"
-    //"http://purl.org/dc/dcmitype/"
-  )
+  val dct = PrefixGenerator.fromSchema[Rdf]("/dctype.rdf")
 
-  val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")(
-    "dc"
-    //"http://purl.org/dc/terms/"
-  )
+  val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")
 
   val frankensteinNotebookB = (
     URI("http://shelleygodwinarchive.org/data/ox/ox-ms_abinger_c57")

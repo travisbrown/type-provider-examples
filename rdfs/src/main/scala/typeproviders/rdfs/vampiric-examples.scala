@@ -9,13 +9,9 @@ class VampiricTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
   import ops._
   import typeproviders.rdfs.anonymous._
 
-  val dct = VampiricPrefixGenerator.fromSchema[Rdf]("/dctype.rdf")(
-    "dct"
-  )
+  val dct = VampiricPrefixGenerator.fromSchema[Rdf]("/dctype.rdf")
 
-  val dc = VampiricPrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")(
-    "dc"
-  )
+  val dc = VampiricPrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")
 
   val frankensteinNotebookB = (
     URI("http://shelleygodwinarchive.org/data/ox/ox-ms_abinger_c57")

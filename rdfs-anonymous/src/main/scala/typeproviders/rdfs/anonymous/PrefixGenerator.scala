@@ -6,17 +6,13 @@ import scala.language.experimental.macros
 import scala.reflect.macros.Context
 import typeproviders.rdfs.SchemaParser
 
-object PrefixGenerator {
+object PrefixGenerator extends AnonymousTypeProviderUtils {
   def fromSchema[Rdf <: RDF](
     path: String
-  )(
-    prefix: String
   )(implicit ops: RDFOps[Rdf]) = macro fromSchema_impl[Rdf]
 
   def fromSchema_impl[Rdf <: RDF: c.WeakTypeTag](c: Context)(
     path: c.Expr[String]
-  )(
-    prefix: c.Expr[String]
   )(ops: c.Expr[RDFOps[Rdf]]) = {
     import c.universe._
 
@@ -29,16 +25,15 @@ object PrefixGenerator {
       )
     }
 
-    val prefixLiteral = prefix.tree match {
-      case Literal(Constant(s: String)) => s
-      case _ => bail("You must provide a literal prefix.")
-    }
+    val prefix = assignedValName(c).getOrElse(
+      bail("You must assign the output of the macro to a value.")
+    )
 
     val schemaParser = SchemaParser.fromResource[Sesame](
       pathLiteral
-    ).get/*OrElse(
+    ).getOrElse(
       bail(s"Invalid schema: $pathLiteral.")
-    )*/
+    )
 
     val baseUri = schemaParser.inferBaseUri.getOrElse(
       bail("Could not identify a unique schema URI.")
@@ -57,7 +52,7 @@ object PrefixGenerator {
     c.Expr[PrefixBuilder[Rdf]](
       q"""
         class Prefix extends
-        org.w3.banana.PrefixBuilder($prefixLiteral, $baseUriString)($ops) {
+          org.w3.banana.PrefixBuilder($prefix, $baseUriString)($ops) {
           ..$defs
         }
         new Prefix {}

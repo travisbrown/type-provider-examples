@@ -130,37 +130,6 @@ of our example using vampire methods here, in general it's probably better to
 avoid the added complexity unless you know for a fact that the performance of
 calls to methods on the structural type is a problem in your application.
 
-Other advanced topics
----------------------
-
-If we look again at the anonymous type provider usage examples above,
-it's clear that there's still some unpleasant repetition:
-
-``` scala
-val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")(
-  "dc",
-  "http://purl.org/dc/terms/"
-)
-```
-
-We're providing a name for the prefix as the first argument (`"dc"` here), but
-this is pretty much always going to be the same as the name of the `val` we're
-defining. It's possible to cut out this extra bit of boilerplate by asking the
-macro to read the value for the prefix name off the name of the `val` that it's
-being assigned to. We provide [an `AdvancedPrefixGenerator`
-implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/AdvancedPrefixGenerator.scala)
-that provides this functionality, allowing us to write the following:
-
-``` scala
-val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")(
-  "http://purl.org/dc/terms/"
-)
-```
-
-Again, the extra complexity (and non-standard constraints on the user) mean
-this kind of trick shouldn't be used carelessly, but in some cases the ability
-to avoid repeating yourself may be worth it.
-
 Licenses
 --------
 
