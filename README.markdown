@@ -79,15 +79,9 @@ this case there are two parameter lists, with the first taking a path to the sch
 resource, and the second taking the arguments for the `PrefixBuilder` constructor):
 
 ``` scala
-val dct = PrefixGenerator.fromSchema[Rdf]("/dctype.rdf")(
-  "dct",
-  "http://purl.org/dc/dcmitype/"
-)
+val dct = PrefixGenerator.fromSchema[Rdf]("/dctype.rdf")
 
-val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")(
-  "dc",
-  "http://purl.org/dc/terms/"
-)
+val dc = PrefixGenerator.fromSchema[Rdf]("/dcterms.rdf")
 ```
 
 The inferred types of `dct` and `dc` are now structural types that allow the
@@ -100,15 +94,9 @@ The public approach uses [macro annotations](http://docs.scala-lang.org/overview
 which allow us to expand the body of an annotated object definition.
 
 ``` scala
-  @fromSchema("/dctype.rdf") object dct extends PrefixBuilder[Rdf](
-    "dct",
-    "http://purl.org/dc/dcmitype/"
-  )
+@fromSchema("/dctype.rdf") object dct extends PrefixBuilder[Rdf]
 
-  @fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf](
-    "dc",
-    "http://purl.org/dc/terms/"
-  )
+@fromSchema("/dcterms.rdf") object dc extends PrefixBuilder[Rdf]
 ```
 
 These definitions support the same usage as the anonymous examples above,
