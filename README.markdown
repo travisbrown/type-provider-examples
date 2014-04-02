@@ -6,6 +6,18 @@ This repository contains type provider examples that will be discussed by
 Brown](https://twitter.com/travisbrown) at the [2014 Scalar
 Conference](http://scalar-conf.com/).
 
+A type provider is a compile-time metaprogramming component that allows the
+user to generate types (and implementations) from an external schema or other
+information source—you can think of them as a more principled approach to
+textual code generation. For more background information, see the following
+resources:
+
+- [Type providers in Scala](http://docs.scala-lang.org/overviews/macros/typeproviders.html)
+- [Macro-supported DSLs for schema bindings in Scala](http://meta.plasm.us/posts/2013/06/19/macro-supported-dsls-for-schema-bindings/)
+- [Type providers in F#](http://msdn.microsoft.com/en-us/library/hh156509.aspx)
+- [Creating a type provider in F#](http://msdn.microsoft.com/en-us/library/hh361034.aspx)
+- [Dependent type providers](http://itu.dk/people/drc/pubs/dependent-type-providers.pdf)
+
 Motivation
 ----------
 
