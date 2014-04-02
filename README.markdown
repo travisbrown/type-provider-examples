@@ -8,9 +8,10 @@ Conference](http://scalar-conf.com/).
 
 A type provider is a compile-time metaprogramming component that allows the
 user to generate types (and implementations) from an external schema or other
-information source—you can think of them as a more principled approach to
-textual code generation. For more background information, see the following
-resources:
+information source—you can think of them as a more principled solution to
+problems that would traditionally be solved with textual code generation (or a
+lot of repetitive boilerplate). For more background information, see the
+following resources:
 
 - [Type providers in Scala](http://docs.scala-lang.org/overviews/macros/typeproviders.html)
 - [Macro-supported DSLs for schema bindings in Scala](http://meta.plasm.us/posts/2013/06/19/macro-supported-dsls-for-schema-bindings/)
