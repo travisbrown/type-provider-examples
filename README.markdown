@@ -137,7 +137,7 @@ These definitions support the same usage as the anonymous examples above,
 but `dct` and `dc` are full-fledged objects, not instances of structural types.
 The generated code looks fairly similar:
 
-```
+``` scala
 object dc extends PrefixBuilder[Rdf]("dc", "http://purl.org/dc/terms/") {
   val title = apply("title")
   val creator = apply("creator")
