@@ -71,7 +71,7 @@ object PrefixGenerator {
           * is likely to fail in a pretty straightforward way if it's not the
           * case, so we'll leave it like this for the sake of simplicity.
           */
-        c.Expr[PrefixBuilder](
+        c.Expr[Any](
           q"""
             object $name extends $parent(${name.decoded}, $baseUriString) {
               ..$defs
