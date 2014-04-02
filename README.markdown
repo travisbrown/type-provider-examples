@@ -118,7 +118,7 @@ Schema file (the second argument to the `PrefixBuilder` constructor) and has
 picked a reasonable short name for the `Prefix` (the first argument).
 
 Please see the comments in [the
-implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/PrefixGenerator.scala)
+implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/anonymous/PrefixGenerator.scala)
 for more detail about how exactly this approach works.
 
 Public type providers
@@ -145,9 +145,9 @@ object dc extends PrefixBuilder[Rdf]("dc", "http://purl.org/dc/terms/") {
 }
 ```
 
-The [implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-public/src/main/scala/typeproviders/rdfs/public/PrefixGenerator.scala)
+The [implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-public/src/main/scala/public/PrefixGenerator.scala)
 is also pretty similar to the [anonymous type provider
-implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/PrefixGenerator.scala).
+implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/anonymous/PrefixGenerator.scala).
 
 Vampire methods
 ---------------
@@ -175,7 +175,7 @@ that's because it is).
 reflective access warning, but this [has been fixed in
 2.10.5](https://github.com/scala/scala/pull/3602).)
 
-While we provide [an implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/typeproviders/rdfs/anonymous/VampiricPrefixGenerator.scala)
+While we provide [an implementation](https://github.com/travisbrown/type-provider-examples/blob/master/rdfs-anonymous/src/main/scala/anonymous/VampiricPrefixGenerator.scala)
 of our example using vampire methods here, in general it's probably better to
 avoid the added complexity, unless you know for a fact that the performance of
 calls to methods on the structural type is a problem in your application.
