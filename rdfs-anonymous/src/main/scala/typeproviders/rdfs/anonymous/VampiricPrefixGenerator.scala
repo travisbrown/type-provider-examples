@@ -74,17 +74,19 @@ object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
       """
     }
 
+    val className = newTypeName(c.fresh("Prefix"))
+
     /** This is again exactly the same as in the non-vampiric version, and the
       * the inferred structural type of the instance we return will also be
-      * exactly the same.
+      * the same, apart from the fact that we're using methods instead of vals.
       */ 
     c.Expr[PrefixBuilder[Rdf]](
       q"""
-        class Prefix extends
+        class $className extends
           org.w3.banana.PrefixBuilder($prefixName, $baseUriString)($ops) {
           ..$defs
         }
-        new Prefix {}
+        new $className {}
       """
     )
   }

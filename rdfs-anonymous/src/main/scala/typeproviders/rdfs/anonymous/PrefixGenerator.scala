@@ -7,12 +7,10 @@ import scala.reflect.macros.Context
 import typeproviders.rdfs.SchemaParser
 
 object PrefixGenerator extends AnonymousTypeProviderUtils {
-  def fromSchema[Rdf <: RDF](path: String)(implicit ops: RDFOps[Rdf]) =
-    macro fromSchema_impl[Rdf]
+  def fromSchema[Rdf <: RDF](path: String) = macro fromSchema_impl[Rdf]
 
   def fromSchema_impl[Rdf <: RDF: c.WeakTypeTag](c: Context)
-    (path: c.Expr[String])
-    (ops: c.Expr[RDFOps[Rdf]]) = {
+    (path: c.Expr[String]) = {
     import c.universe._
 
     def bail(message: String) = c.abort(c.enclosingPosition, message)
@@ -74,18 +72,24 @@ object PrefixGenerator extends AnonymousTypeProviderUtils {
       q"val ${newTermName(name)} = apply($name)"
     }
 
+    /** We need to define a local class below, and we'll generate a fresh name
+      * to make sure we don't shadow some definition we might need in the
+      * future.
+      */
+    val className = newTypeName(c.fresh("Prefix"))
+
     /** And now we define our anonymous class and instantiate it. See
       * [[http://stackoverflow.com/a/18485004/334519 this Stack Overflow
       * answer]] for some discussion of why we need both a local class
       * definition and an anonymous class.
       */
-    c.Expr[PrefixBuilder[Rdf]](
+    c.Expr[Any](
       q"""
-        class Prefix extends
-          org.w3.banana.PrefixBuilder($prefixName, $baseUriString)($ops) {
+        class $className extends
+          org.w3.banana.PrefixBuilder($prefixName, $baseUriString) {
           ..$defs
         }
-        new Prefix {}
+        new $className {}
       """
     )
   }
