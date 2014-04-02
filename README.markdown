@@ -19,6 +19,10 @@ following resources:
 - [Creating a type provider in F#](http://msdn.microsoft.com/en-us/library/hh361034.aspx)
 - [Dependent type providers](http://itu.dk/people/drc/pubs/dependent-type-providers.pdf)
 
+Type providers are made possible in Scala by the experimental macro system
+introduced in 2.10; neither of the approaches outlined here will work on
+earlier versions.
+
 Motivation
 ----------
 
