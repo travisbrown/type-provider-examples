@@ -188,3 +188,6 @@ Portions of this software may use RDF schemas copyright © 2011
 These are licensed under the [Creative Commons 3.0
 Attribution](http://creativecommons.org/licenses/by/3.0/) license.
 
+All other code is released under the [Apache License, Version
+2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
+
