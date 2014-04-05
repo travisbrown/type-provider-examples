@@ -1,7 +1,6 @@
 package typeproviders.rdfs.examples
 
 import org.w3.banana._
-import org.w3.banana.sesame.Sesame
 import org.w3.banana.diesel._
 
 class AnonymousTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
