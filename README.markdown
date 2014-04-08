@@ -1,10 +1,11 @@
 Scala type provider examples
 ============================
 
-This repository contains type provider examples that will be discussed by
+This repository contains type provider examples that were discussed by
 [Eugene Burmako](https://twitter.com/xeno_by) and [Travis
 Brown](https://twitter.com/travisbrown) at the [2014 Scalar
-Conference](http://scalar-conf.com/).
+Conference](http://scalar-conf.com/). The talk was not recorded, but our slides
+are available in [this repository](https://github.com/travisbrown/type-provider-examples/tree/master/docs).
 
 A type provider is a compile-time metaprogramming component that allows the
 user to generate types (and implementations) from an external schema or other
@@ -22,6 +23,11 @@ following resources:
 Type providers are made possible in Scala by the experimental macro system
 introduced in 2.10; neither of the approaches outlined here will work on
 earlier versions.
+
+After some conversations at the Scalar conference, we also began work on a
+[regular expression type provider](https://github.com/travisbrown/expressier)
+for Scala. This project is currently a fairly rough proof of concept, but it
+may help to show the range of possibilities for these kinds of components.
 
 Motivation
 ----------
