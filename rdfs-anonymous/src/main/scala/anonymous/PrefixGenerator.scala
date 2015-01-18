@@ -1,16 +1,19 @@
 package typeproviders.rdfs.anonymous
 
-import org.w3.banana._
-import org.w3.banana.sesame.Sesame
+import org.w3.banana.{ PrefixBuilder, RDF, RDFOps }
+import org.w3.banana.sesame.SesameModule
 import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import typeproviders.rdfs.SchemaParser
+import typeproviders.rdfs.SchemaParserModule
 
-object PrefixGenerator extends AnonymousTypeProviderUtils {
-  def fromSchema[Rdf <: RDF](path: String) = macro fromSchema_impl[Rdf]
+object PrefixGenerator extends AnonymousTypeProviderUtils
+  with SchemaParserModule with SesameModule { gen =>
+  def fromSchema[Rdf <: RDF](path: String)(implicit ops: RDFOps[Rdf]) =
+    macro fromSchema_impl[Rdf]
 
   def fromSchema_impl[Rdf <: RDF: c.WeakTypeTag](c: Context)
-    (path: c.Expr[String]) = {
+    (path: c.Expr[String])
+    (ops: c.Expr[RDFOps[Rdf]]) = {
     import c.universe._
 
     def bail(message: String) = c.abort(c.enclosingPosition, message)
@@ -39,9 +42,7 @@ object PrefixGenerator extends AnonymousTypeProviderUtils {
       * backend for Banana, but that's only relevant now (at compile time);
       * the macro user can pick whichever backend they want.
       */
-    val schemaParser = SchemaParser.fromResource[Sesame](
-      pathLiteral
-    ).getOrElse(
+    val schemaParser = fromResource(pathLiteral).getOrElse(
       bail(s"Invalid schema: $pathLiteral.")
     )
 
@@ -56,7 +57,7 @@ object PrefixGenerator extends AnonymousTypeProviderUtils {
     /** Now we have the URI as an instance of Sesame#URI, but we also need it
       * as a string for the [[org.w3.banana.PrefixBuilder]] constructor.
       */
-    val baseUriString = RDFOps[Sesame].fromUri(baseUri)
+    val baseUriString = gen.ops.fromUri(baseUri)
 
     /** Next we read all class and property names out of the schema. Banana
       * doesn't distinguish between the two here, so we just combine them.
@@ -83,7 +84,7 @@ object PrefixGenerator extends AnonymousTypeProviderUtils {
       * answer]] for some discussion of why we need both a local class
       * definition and an anonymous class.
       */
-    c.Expr[Any](
+    c.Expr[PrefixBuilder[Rdf]](
       q"""
         class $className extends
           org.w3.banana.PrefixBuilder($prefixName, $baseUriString) {

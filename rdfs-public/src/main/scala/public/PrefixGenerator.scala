@@ -1,17 +1,16 @@
 package typeproviders.rdfs.public
 
-import org.w3.banana._
-import org.w3.banana.sesame.Sesame
+import org.w3.banana.sesame.SesameModule
 import scala.annotation.StaticAnnotation
 import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import typeproviders.rdfs.SchemaParser
+import typeproviders.rdfs.SchemaParserModule
 
 class fromSchema(path: String) extends StaticAnnotation {
   def macroTransform(annottees: Any*) = macro PrefixGenerator.fromSchema_impl
 }
 
-object PrefixGenerator {
+object PrefixGenerator extends SchemaParserModule with SesameModule { gen =>
   def fromSchema_impl(c: Context)(annottees: c.Expr[Any]*) = {
     import c.universe._
 
@@ -48,7 +47,7 @@ object PrefixGenerator {
         /** The following few steps look exactly like what we did in the case
           * of the anonymous type providers.
           */
-        val schemaParser = SchemaParser.fromResource[Sesame](path).getOrElse(
+        val schemaParser = fromResource(path).getOrElse(
           bail(s"Invalid schema: $path.")
         )
 
@@ -56,7 +55,7 @@ object PrefixGenerator {
           bail("Could not identify a unique schema URI.")
         )
 
-        val baseUriString = RDFOps[Sesame].fromUri(baseUri)
+        val baseUriString = gen.ops.fromUri(baseUri)
 
         val names =
           schemaParser.classNames(baseUri) ++

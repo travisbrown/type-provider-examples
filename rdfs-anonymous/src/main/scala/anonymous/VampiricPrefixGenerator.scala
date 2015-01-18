@@ -1,16 +1,17 @@
 package typeproviders.rdfs.anonymous
 
-import org.w3.banana._
-import org.w3.banana.sesame.Sesame
+import org.w3.banana.{ PrefixBuilder, RDF, RDFOps }
+import org.w3.banana.sesame.SesameModule
 import scala.annotation.StaticAnnotation
 import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import typeproviders.rdfs.SchemaParser
+import typeproviders.rdfs.SchemaParserModule
 
 /** An alternative implementation of the anonymous type provider that uses
   * "vampire" methods to avoid reflective calls on the structural type.
   */
-object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
+object VampiricPrefixGenerator extends AnonymousTypeProviderUtils
+  with SchemaParserModule with SesameModule { gen =>
   class body(tree: Any) extends StaticAnnotation
 
   /** A helper method that allows a macro method to read an annotation on
@@ -47,9 +48,7 @@ object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
       bail("You must assign the output of the macro to a value.")
     )
 
-    val schemaParser = SchemaParser.fromResource[Sesame](
-      pathLiteral
-    ).getOrElse(
+    val schemaParser = fromResource(pathLiteral).getOrElse(
       bail(s"Invalid schema: $pathLiteral.")
     )
 
@@ -57,7 +56,7 @@ object VampiricPrefixGenerator extends AnonymousTypeProviderUtils {
       bail("Could not identify a unique schema URI.")
     )
 
-    val baseUriString = RDFOps[Sesame].fromUri(baseUri)
+    val baseUriString = gen.ops.fromUri(baseUri)
 
     val names =
       schemaParser.classNames(baseUri) ++

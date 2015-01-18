@@ -34,4 +34,3 @@ class PublicTypeProviderExample[Rdf <: RDF](implicit ops: RDFOps[Rdf]) {
       -- dc.creator ->- URI("https://en.wikipedia.org/wiki/Mary_Shelley")
   )
 }
-
