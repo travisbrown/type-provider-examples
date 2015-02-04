@@ -1,6 +1,8 @@
 Scala type provider examples
 ============================
 
+[![Build status](https://img.shields.io/travis/travisbrown/type-provider-examples/master.svg)](http://travis-ci.org/travisbrown/type-provider-examples)
+
 This repository contains type provider examples that were discussed by
 [Eugene Burmako](https://twitter.com/xeno_by) and [Travis
 Brown](https://twitter.com/travisbrown) at the [2014 Scalar
