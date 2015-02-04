@@ -1,3 +1,6 @@
+lazy val root = project.in(file("."))
+  .aggregate(rdfsCommon, rdfsPublic, rdfsAnonymous, rdfs)
+
 lazy val rdfsCommon = project.in(file("rdfs-common"))
   .settings(moduleName := "rdfs-common")
   .settings(buildSettings: _*)
@@ -17,10 +20,6 @@ lazy val rdfsAnonymous = project.in(file("rdfs-anonymous"))
   .settings(libraryDependencies += sesameDependency)
   .dependsOn(rdfsCommon)
 
-lazy val sesameDependency = "org.w3" %% "sesame" % "0.7.1"
-lazy val paradiseDependency =
-  "org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full
-
 lazy val rdfs = project.in(file("rdfs"))
   .settings(buildSettings: _*)
   .settings(
@@ -32,7 +31,7 @@ lazy val rdfs = project.in(file("rdfs"))
   .dependsOn(rdfsPublic, rdfsAnonymous)
 
 lazy val buildSettings = Seq(
-  version := "0.0.0-SNAPSHOT",
+  version := "0.1.0-SNAPSHOT",
   scalaVersion := "2.11.5",
   crossScalaVersions := Seq("2.10.4", "2.11.5"),
   scalacOptions ++= Seq(
@@ -53,6 +52,10 @@ lazy val buildSettings = Seq(
     */
   addCompilerPlugin(paradiseDependency)
 )
+
+lazy val sesameDependency = "org.w3" %% "sesame" % "0.7.1"
+lazy val paradiseDependency =
+  "org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full
 
 lazy val macroProjectSettings = Seq(
   libraryDependencies <+= (scalaVersion)(
