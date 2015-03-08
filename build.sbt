@@ -32,8 +32,8 @@ lazy val rdfs = project.in(file("rdfs"))
 
 lazy val buildSettings = Seq(
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.11.5",
-  crossScalaVersions := Seq("2.10.4", "2.11.5"),
+  scalaVersion := "2.11.6",
+  crossScalaVersions := Seq("2.10.5", "2.11.6"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -55,7 +55,7 @@ lazy val buildSettings = Seq(
 
 lazy val sesameDependency = "org.w3" %% "sesame" % "0.7.1"
 lazy val paradiseDependency =
-  "org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full
+  "org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full
 
 lazy val macroProjectSettings = Seq(
   libraryDependencies <+= (scalaVersion)(
