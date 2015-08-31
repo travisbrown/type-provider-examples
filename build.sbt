@@ -3,25 +3,23 @@ lazy val root = project.in(file("."))
 
 lazy val rdfsCommon = project.in(file("rdfs-common"))
   .settings(moduleName := "rdfs-common")
-  .settings(buildSettings: _*)
-  .settings(libraryDependencies += "org.w3" %% "banana_jvm" % "0.7.1")
+  .settings(buildSettings)
+  .settings(libraryDependencies += "org.w3" %% "banana-rdf" % "0.8.2-SNAPSHOT")
 
 lazy val rdfsPublic = project.in(file("rdfs-public"))
   .settings(moduleName := "rdfs-public")
-  .settings(buildSettings: _*)
-  .settings(macroProjectSettings: _*)
+  .settings(buildSettings ++ macroProjectSettings)
   .settings(libraryDependencies += sesameDependency)
   .dependsOn(rdfsCommon)
 
 lazy val rdfsAnonymous = project.in(file("rdfs-anonymous"))
   .settings(moduleName := "rdfs-anonymous")
-  .settings(buildSettings: _*)
-  .settings(macroProjectSettings: _*)
+  .settings(buildSettings ++ macroProjectSettings)
   .settings(libraryDependencies += sesameDependency)
   .dependsOn(rdfsCommon)
 
 lazy val rdfs = project.in(file("rdfs"))
-  .settings(buildSettings: _*)
+  .settings(buildSettings)
   .settings(
     /** See this Stack Overflow question and answer for some discussion of
       * why we need this line: http://stackoverflow.com/q/17134244/334519
@@ -32,8 +30,8 @@ lazy val rdfs = project.in(file("rdfs"))
 
 lazy val buildSettings = Seq(
   version := "0.1.0-SNAPSHOT",
-  scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.10.5", "2.11.6"),
+  scalaVersion := "2.11.7",
+  crossScalaVersions := Seq("2.10.5", "2.11.7"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -41,7 +39,8 @@ lazy val buildSettings = Seq(
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("snapshots"),
-    Resolver.sonatypeRepo("releases")
+    Resolver.sonatypeRepo("releases"),
+    "bblfish" at "http://bblfish.net/work/repo/snapshots/"
   ),
 
   /** We need the Macro Paradise plugin both to support the macro
@@ -53,7 +52,7 @@ lazy val buildSettings = Seq(
   addCompilerPlugin(paradiseDependency)
 )
 
-lazy val sesameDependency = "org.w3" %% "sesame" % "0.7.1"
+lazy val sesameDependency = "org.w3" %% "banana-sesame" % "0.8.2-SNAPSHOT"
 lazy val paradiseDependency =
   "org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full
 
